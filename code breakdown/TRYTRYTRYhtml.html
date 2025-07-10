@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text File Search</title>
+</head>
+<body>
+    <h2>Search in Text Files</h2>
+    <form method="POST">
+        <input type="text" name="query" placeholder="Enter search term" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+        <h3>Search Results:</h3>
+        <ul>
+            {% for result in results %}
+                <li>{{ result|safe }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

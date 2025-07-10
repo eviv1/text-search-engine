@@ -1,0 +1,194 @@
+<html>
+    <header>
+        <title>Search in Text Files</title>
+    <style>
+    html {
+      overflow-y: scroll;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e0f8e0;
+        /* green base */
+        margin: 15px;
+        padding: 15px;
+        position: relative;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        /* increase for larger logo */
+        height: 600px;
+        background-image: url('/logo.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        opacity: 0.05;
+        /* LOW opacity */
+        z-index: 0;
+        pointer-events: none;
+        /* allow clicks through */
+    }
+
+    .content {
+        position: relative;
+        z-index: 1;
+        /* content sits above logo */
+        background-color: rgba(255, 255, 255, 0);
+        padding: 20px;
+        margin: 0 auto;
+        max-width: 90%;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    input {
+        display: block;
+        margin: 0 auto;
+        padding: 10px;
+        font-size: 16px;
+        width: 50%;
+    }
+
+    table {
+        margin: 20px auto;
+        border-collapse: 20px;
+          table-layout: fixed;
+        width: 100%;
+        text-align: left;
+        background-color: rgba(11, 0, 0, 0);
+    }
+
+    th,
+    td {
+        padding: 12px 16px;
+        border: 1px solid #000000;
+        min-width: fit-content;
+        overflow: hidden;           /* hides overflowing content */
+        text-overflow: ellipsis;   /* adds "..." to truncated content */
+        vertical-align: top
+    }
+
+    th {
+        background-color: #99d799;
+        text-align: center;
+    }
+
+    input{
+      min-width: 100%;
+    }
+</style>
+  </header>
+<body>
+    <h2 style="text-align: center;">Text Directory</h2>
+    <p style="text-align: center;">(c) OJT2025 - Viola, Hugo, Ibasan</span></p>
+<table id="searchResults">
+	<tr>
+		<th>Name</th>
+        <th>Show</th>
+		<th>Description</th>
+	</tr>
+
+    <tr>
+        <th><input type="text" id="searchInput1" onkeyup="searchTable(0, 'searchInput1')" placeholder="Search Name..."></th>
+        <th></th>
+        <th><input type="text" id="searchInput2" onkeyup="searchTable(2, 'searchInput2')" placeholder="Search Content..."></th>
+    </tr>
+{% if results is not none %}
+    {% if results %}
+            {% for result in results %}
+                <tr>{{ result|safe }}</tr>
+            {% endfor %}
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+{% endif %}
+</table>
+
+<div id="listingTable"></div>
+<a href="javascript:prevPage()" id="btn_prev">Prev</a>
+<a href="javascript:nextPage()" id="btn_next">Next</a>
+<br>
+page: <span id="page"></span>
+</body>
+
+
+<script>
+function toggleContent(button) {
+    const row = button.closest('tr');
+    const content = row.querySelector('.content-snippet');
+    if (content) {
+        content.style.display = content.style.display === "none" ? "block" : "none";
+    }
+}
+
+function searchTable(j, searchBar) {
+  let input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById(searchBar);
+
+  filter = input.value.toUpperCase();
+  table = document.getElementById("searchResults");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[j];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+
+        // Highlight matching text
+        const regex = new RegExp(`(${input.value})`, 'gi');
+        td.innerHTML = txtValue.replace(regex, '<mark>$1</mark>');
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+
+let current_page = 1;
+const records_per_page = 5;
+
+function paginateTable() {
+    const rows = document.querySelectorAll("#searchResults tr");
+    const dataRows = Array.from(rows).slice(2); // Skip header + search row
+
+    const total_pages = Math.ceil(dataRows.length / records_per_page);
+    const start = (current_page - 1) * records_per_page;
+    const end = start + records_per_page;
+
+    dataRows.forEach((row, index) => {
+        row.style.display = (index >= start && index < end) ? "" : "none";
+    });
+
+    document.getElementById("page").textContent = current_page;
+    document.getElementById("btn_prev").style.visibility = current_page === 1 ? "hidden" : "visible";
+    document.getElementById("btn_next").style.visibility = current_page === total_pages ? "hidden" : "visible";
+}
+
+function nextPage() {
+    const rows = document.querySelectorAll("#searchResults tr");
+    const dataRows = Array.from(rows).slice(2);
+    if (current_page * records_per_page < dataRows.length) {
+        current_page++;
+        paginateTable();
+    }
+}
+
+function prevPage() {
+    if (current_page > 1) {
+        current_page--;
+        paginateTable();
+    }
+}
+
+window.onload = paginateTable;
+</script>
+</html>

@@ -1,0 +1,20 @@
+LEVELS:
+Find a string from a sentence. Return if true. / 1
+
+Find a string of user input from a sentence. / 2
+
+Find a string from a txt file. / 3
+
+Find a string of user input from a txt file. /4 
+
+Find all txt files from the folder. / 5
+
+Find a string from a series of txt files in one folder. /6
+
+Find a string including the title from a series of txt files in one folder. 7 /
+
+Find a string including the title from multiple directories. 8/
+
+Find a string including the title from multiple directories and return the directory and link that contains the string/title. /
+
+Find a string of user input including the title from multiple directories and return the directory and link that contains the string.

@@ -1,0 +1,102 @@
+<!-- To use this document, please install Flask before opening index.html. Run app.py while opening 127.0.0.1. Thank you!
+- evii-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Text Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to bottom, white, #10de47);
+			min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        input[type="text"] {
+            padding: 0.5rem;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: #40ed6e;
+            color: white;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2fc457;
+        }
+
+        h3 {
+            color: #444;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+		
+		li:hover{
+			background-color: #f5f5f5;
+		}
+
+        li {
+            background-color: #fff;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            max-width: 600px;
+        }
+		
+		span.small {
+		  font-size: smaller;
+		}
+    </style>
+</head>
+<body>
+    <h2>--- Search in Text Files ---</h2>
+	<p><span class="small">(c) OJT2025 - Viola, Hugo, Ibasan</span></p>
+    <form method="POST">
+        <input type="text" name="query" placeholder="Search..." required>
+        <button type="submit">Search</button>
+    </form>
+
+{% if results is not none %}
+    <h3>Search Results:</h3>
+    {% if results %}
+        <ul>
+            {% for result in results %}
+                <li>{{ result|safe }}</li>
+            {% endfor %}
+        </ul>
+		<h3 style = "color:black">End of Search Results</h3>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+{% endif %}
+</body>
+</html>
